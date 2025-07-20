@@ -5,7 +5,9 @@
       "Bash(mkdir:*)",
       "Bash(python test:*)",
       "Bash(python:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
