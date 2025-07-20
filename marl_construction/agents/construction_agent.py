@@ -152,7 +152,9 @@ class MultiAgentSystem:
             return None
             
         messages = list(self.message_buffer.values())
-        return torch.stack(messages).mean(dim=0)
+        if messages and isinstance(messages[0], torch.Tensor):
+            return torch.stack(messages).mean(dim=0)
+        return None
 
 class RoleSpecificReward:
     @staticmethod

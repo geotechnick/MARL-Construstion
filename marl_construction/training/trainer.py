@@ -6,7 +6,7 @@ from typing import Dict, List, Tuple, Optional, Any
 from collections import defaultdict, deque
 import matplotlib.pyplot as plt
 import seaborn as sns
-from tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 import os
 import pickle
 from tqdm import tqdm

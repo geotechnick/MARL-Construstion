@@ -39,7 +39,7 @@ class ConstructionEnv(ParallelEnv):
                  max_timesteps: int = 500,
                  render_mode: Optional[str] = None):
         
-        self.num_agents = num_agents
+        self._num_agents = num_agents
         self.site_width = site_width
         self.site_height = site_height
         self.max_timesteps = max_timesteps
@@ -57,7 +57,7 @@ class ConstructionEnv(ParallelEnv):
         
         # Define action and observation spaces
         self.action_spaces = {
-            agent: spaces.Discrete(9) for agent in self.agents  # 8 directions + stay + special action
+            agent: spaces.Discrete(10) for agent in self.agents  # 8 directions + stay + special action
         }
         
         obs_size = site_width * site_height + 10  # Grid + agent info
@@ -109,8 +109,12 @@ class ConstructionEnv(ParallelEnv):
                 self.construction_site.add_material(x, y, "brick")
                 
         # Add construction tasks
-        for i in range(5):
-            x, y = random.randint(2, self.site_width-3), random.randint(2, self.site_height-3)
+        num_tasks = min(5, max(1, (self.site_width - 4) * (self.site_height - 4)))
+        for i in range(num_tasks):
+            if self.site_width > 4 and self.site_height > 4:
+                x, y = random.randint(2, self.site_width-3), random.randint(2, self.site_height-3)
+            else:
+                x, y = random.randint(0, self.site_width-1), random.randint(0, self.site_height-1)
             self.construction_site.add_task({
                 "id": i,
                 "type": "build_wall",
@@ -147,7 +151,7 @@ class ConstructionEnv(ParallelEnv):
                 ox, oy = self.agent_positions[other_agent]
                 if abs(ox - x) <= 2 and abs(oy - y) <= 2:
                     nearby_agents += 1
-        obs.append(nearby_agents / len(self.agents))
+        obs.append(nearby_agents / max(len(self.agents), 1))
         
         # Tasks info
         incomplete_tasks = len([t for t in self.construction_site.tasks if not t["completed"]])

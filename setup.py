@@ -21,6 +21,6 @@ setup(
     python_requires=">=3.8",
     author="MARL Construction Team",
     description="Multi-Agent Reinforcement Learning for Construction Simulation",
-    long_description=open("README.md").read(),
+    long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
 )

@@ -14,7 +14,7 @@ from marl_construction.training import MARLTrainer
 
 def demo_environment():
     """Run a quick demo of the environment with random agents."""
-    print("🎮 Running Environment Demo with Random Agents")
+    print("Running Environment Demo with Random Agents")
     print("-" * 50)
     
     # Create a small environment for quick demo
@@ -65,7 +65,7 @@ def demo_environment():
 
 def quick_training():
     """Run a quick training session (few episodes for demonstration)."""
-    print("🚀 Running Quick Training Session")
+    print("Running Quick Training Session")
     print("-" * 50)
     
     # Set random seeds
@@ -238,28 +238,28 @@ def main():
     args = parser.parse_args()
     
     print("=" * 60)
-    print("🏗️  MARL Construction Simulation - Quick Start")
+    print("MARL Construction Simulation - Quick Start")
     print("=" * 60)
     
     if args.mode in ["demo", "all"]:
-        print("\n1️⃣  Environment Demo")
+        print("\n1. Environment Demo")
         demo_environment()
         
         if args.mode == "all":
             input("\nPress Enter to continue to training...")
     
     if args.mode in ["train", "all"]:
-        print("\n2️⃣  Quick Training")
+        print("\n2. Quick Training")
         episode_rewards = quick_training()
         
         if args.mode == "all":
             input("\nPress Enter to continue to interactive demo...")
     
     if args.mode in ["interactive", "all"]:
-        print("\n3️⃣  Interactive Demo")
+        print("\n3. Interactive Demo")
         interactive_demo()
     
-    print("\n🎉 Quick start completed!")
+    print("\nQuick start completed!")
     print("\nNext steps:")
     print("• Run full training: python examples/basic_training.py")
     print("• Evaluate agents: python examples/evaluate_agents.py") 

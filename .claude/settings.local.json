@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:github.com)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(python test:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)"
     ],
     "deny": []
   }
