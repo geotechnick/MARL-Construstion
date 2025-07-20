@@ -60,6 +60,20 @@ This will:
 - Save models and training plots
 - Evaluate final performance
 
+### Custom Site Builder
+
+```bash
+python examples/site_builder.py
+```
+
+Interactive GUI for designing custom construction scenarios with drag-and-drop placement.
+
+### Train on Custom Sites
+
+```bash
+python examples/train_custom_site.py --site my_site.json --episodes 1000
+```
+
 ### Evaluation
 
 ```bash
@@ -84,6 +98,12 @@ python scripts/quick_start.py --mode all         # All modes (default)
 - Materials and construction tasks
 - Multi-agent coordination requirements
 - Role-specific action spaces
+
+### Custom Site Builder (`ConstructionSiteBuilder`)
+- **Interactive GUI** for designing construction scenarios
+- **Drag-and-drop** placement of materials, tasks, and spawn points
+- **Save/Load** custom sites for training
+- **Live testing** with MARL agents
 
 ### Agents (`ConstructionAgent`)
 - **Builder**: Constructs structures from materials
