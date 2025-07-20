@@ -16,7 +16,7 @@ A Multi-Agent Reinforcement Learning framework for construction site simulation 
 
 1. **Clone the repository**:
 ```bash
-git clone https://github.com/your-username/MARL-Construction.git
+git clone https://github.com/geotechnick/MARL-Construstion
 cd MARL-Construction
 ```
 
