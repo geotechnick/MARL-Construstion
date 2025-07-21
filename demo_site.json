@@ -1,0 +1,89 @@
+{
+  "width": 12,
+  "height": 12,
+  "materials": {
+    "0,1": "brick",
+    "0,10": "steel",
+    "3,1": "brick",
+    "3,10": "steel",
+    "6,1": "brick",
+    "6,10": "steel",
+    "9,1": "brick",
+    "9,10": "steel"
+  },
+  "tasks": [
+    {
+      "id": 0,
+      "type": "build_wall",
+      "position": [
+        5,
+        5
+      ],
+      "materials_needed": 2,
+      "completed": false,
+      "assigned_agents": []
+    },
+    {
+      "id": 1,
+      "type": "build_wall",
+      "position": [
+        7,
+        5
+      ],
+      "materials_needed": 2,
+      "completed": false,
+      "assigned_agents": []
+    },
+    {
+      "id": 2,
+      "type": "build_wall",
+      "position": [
+        5,
+        7
+      ],
+      "materials_needed": 2,
+      "completed": false,
+      "assigned_agents": []
+    },
+    {
+      "id": 3,
+      "type": "build_wall",
+      "position": [
+        7,
+        7
+      ],
+      "materials_needed": 2,
+      "completed": false,
+      "assigned_agents": []
+    },
+    {
+      "id": 4,
+      "type": "build_wall",
+      "position": [
+        6,
+        6
+      ],
+      "materials_needed": 2,
+      "completed": false,
+      "assigned_agents": []
+    }
+  ],
+  "spawn_points": [
+    [
+      0,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      0,
+      11
+    ],
+    [
+      11,
+      11
+    ]
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "width": 8,
+  "height": 8,
+  "materials": {
+    "2,2": "brick",
+    "5,5": "steel"
+  },
+  "tasks": [
+    {
+      "id": 0,
+      "type": "build_wall",
+      "position": [
+        6,
+        6
+      ],
+      "materials_needed": 2,
+      "completed": false,
+      "assigned_agents": []
+    }
+  ],
+  "spawn_points": [
+    [
+      1,
+      1
+    ],
+    [
+      7,
+      7
+    ]
+  ]
+}

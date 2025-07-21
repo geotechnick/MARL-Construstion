@@ -24,12 +24,18 @@ class ConstructionSiteBuilder:
         
         # Pygame setup
         pygame.init()
-        self.screen = pygame.display.set_mode((
-            width * self.cell_size + 300,  # Extra space for toolbar
-            height * self.cell_size + 100   # Extra space for controls
-        ))
+        pygame.display.init()
+        
+        # Create display
+        display_width = width * self.cell_size + 300  # Extra space for toolbar
+        display_height = height * self.cell_size + 100   # Extra space for controls
+        
+        self.screen = pygame.display.set_mode((display_width, display_height))
         pygame.display.set_caption("MARL Construction Site Builder")
         self.clock = pygame.time.Clock()
+        
+        # Initialize fonts
+        pygame.font.init()
         self.font = pygame.font.Font(None, 24)
         self.small_font = pygame.font.Font(None, 18)
         
@@ -78,11 +84,26 @@ class ConstructionSiteBuilder:
     def place_element(self, x: int, y: int):
         """Place element at grid position."""
         if self.current_tool == "material":
-            self.materials[(x, y)] = self.current_material
-            self.grid[y, x] = 1
+            self.add_material(x, y, self.current_material)
             
         elif self.current_tool == "task":
-            # Add construction task
+            self.add_task(x, y)
+            
+        elif self.current_tool == "spawn":
+            self.add_spawn(x, y)
+                
+        elif self.current_tool == "erase":
+            self.remove_element(x, y)
+            
+    def add_material(self, x: int, y: int, material_type: str = "brick"):
+        """Add material at position."""
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self.materials[(x, y)] = material_type
+            self.grid[y, x] = 1
+            
+    def add_task(self, x: int, y: int):
+        """Add construction task at position."""
+        if 0 <= x < self.width and 0 <= y < self.height:
             task_id = len(self.tasks)
             self.tasks.append({
                 "id": task_id,
@@ -93,13 +114,16 @@ class ConstructionSiteBuilder:
                 "assigned_agents": []
             })
             
-        elif self.current_tool == "spawn":
-            # Add agent spawn point
+    def add_spawn(self, x: int, y: int):
+        """Add agent spawn point at position."""
+        if 0 <= x < self.width and 0 <= y < self.height:
             if len(self.spawn_points) < 8:  # Max 8 agents
                 self.spawn_points.append((x, y))
                 
-        elif self.current_tool == "erase":
-            # Remove element
+    def remove_element(self, x: int, y: int):
+        """Remove element at position."""
+        if 0 <= x < self.width and 0 <= y < self.height:
+            # Remove material
             if (x, y) in self.materials:
                 del self.materials[(x, y)]
             self.grid[y, x] = 0
@@ -402,52 +426,74 @@ class ConstructionSiteBuilder:
             return
             
         print("Testing site with MARL agents...")
-        self.running = False  # Close builder
         
-        # Create custom environment
-        env = CustomConstructionEnv(self.to_construction_site())
+        # Save current site first
+        self.save_site()
         
-        # Run a quick test
-        from ..agents import ConstructionAgent
-        obs, _ = env.reset()
+        # Close builder
+        self.running = False
         
-        # Create agents
-        obs_dim = len(obs[env.agents[0]])
-        action_dim = env.action_spaces[env.agents[0]].n
-        
-        agents = {}
-        roles = ["builder", "transporter", "crane_operator", "supervisor"]
-        for i, agent_id in enumerate(env.agents):
-            role = roles[i % len(roles)]
-            agents[agent_id] = ConstructionAgent(
-                obs_dim=obs_dim,
-                action_dim=action_dim,
-                hidden_dim=32,
-                role=role
-            )
+        try:
+            # Create custom environment
+            env = CustomConstructionEnv(self.to_construction_site())
             
-        # Run test episode
-        import torch
-        for step in range(100):
-            env.render()
-            
-            # Get actions
-            actions = {}
-            for agent_id, agent in agents.items():
-                obs_tensor = torch.FloatTensor(obs[agent_id]).unsqueeze(0)
-                action, _ = agent.get_action(obs_tensor)
-                actions[agent_id] = action
-                
-            obs, rewards, terms, truncs, _ = env.step(actions)
-            
-            if any(terms.values()) or any(truncs.values()):
-                break
-                
+            # Run a quick test
+            from ..agents import ConstructionAgent
+            import torch
             import time
-            time.sleep(0.1)
             
-        env.close()
-        print("Test completed!")
+            obs, _ = env.reset()
+            
+            # Create agents
+            obs_dim = len(obs[env.agents[0]])
+            action_dim = env.action_spaces[env.agents[0]].n
+            
+            agents = {}
+            roles = ["builder", "transporter", "crane_operator", "supervisor"]
+            for i, agent_id in enumerate(env.agents):
+                role = roles[i % len(roles)]
+                agents[agent_id] = ConstructionAgent(
+                    obs_dim=obs_dim,
+                    action_dim=action_dim,
+                    hidden_dim=32,
+                    role=role
+                )
+                
+            print("Running test simulation...")
+            print("Close the window to stop the test.")
+            
+            # Run test episode
+            for step in range(100):
+                env.render()
+                
+                # Get actions
+                actions = {}
+                for agent_id, agent in agents.items():
+                    obs_tensor = torch.FloatTensor(obs[agent_id]).unsqueeze(0)
+                    action, _ = agent.get_action(obs_tensor)
+                    actions[agent_id] = action
+                    
+                obs, rewards, terms, truncs, _ = env.step(actions)
+                
+                if step % 20 == 0:
+                    completed = len([t for t in env.construction_site.tasks if t["completed"]])
+                    total = len(env.construction_site.tasks)
+                    print(f"Step {step}: {completed}/{total} tasks completed")
+                
+                if any(terms.values()) or any(truncs.values()):
+                    break
+                    
+                time.sleep(0.1)
+                
+            env.close()
+            print("Test completed!")
+            
+        except Exception as e:
+            print(f"Error during testing: {e}")
+            print("Make sure all dependencies are installed.")
+        
+        # Don't restart builder automatically
+        print("Test finished. Run the builder again to continue designing.")
         
     def to_construction_site(self) -> ConstructionSite:
         """Convert builder state to ConstructionSite object."""
@@ -469,12 +515,26 @@ class ConstructionSiteBuilder:
         print("  T: Test site with agents")
         print("\nClick and drag to build your construction site!")
         
-        while self.running:
-            self.handle_events()
-            self.draw()
-            self.clock.tick(60)
-            
-        pygame.quit()
+        try:
+            while self.running:
+                self.handle_events()
+                
+                # Check if display is still valid
+                if pygame.get_init() and pygame.display.get_surface():
+                    self.draw()
+                    self.clock.tick(60)
+                else:
+                    print("Display surface lost, exiting...")
+                    break
+                    
+        except pygame.error as e:
+            print(f"Pygame error: {e}")
+        except Exception as e:
+            print(f"Error in builder: {e}")
+        finally:
+            if pygame.get_init():
+                pygame.quit()
+            print("Builder closed.")
 
 class CustomConstructionEnv(ConstructionEnv):
     """Construction environment that uses a custom site."""
