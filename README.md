@@ -1,14 +1,15 @@
-# MARL Construction Simulation
+# MARL Construction Cost Estimation
 
-A Multi-Agent Reinforcement Learning framework for construction site simulation and coordination. This project implements specialized agents (builders, transporters, crane operators, supervisors) that learn to collaborate on construction tasks through reinforcement learning.
+A Multi-Agent Reinforcement Learning system for intelligent construction cost estimation. This project implements specialized agents (Owner, Contractor, Supplier, Regulator, Estimator) that negotiate and collaborate to produce accurate, data-driven cost estimates for construction projects across multiple sectors.
 
 ## 🏗️ Features
 
-- **Multi-Agent Environment**: Construction site simulation with materials, tasks, and agent coordination
-- **Specialized Agent Roles**: Different agent types with unique capabilities and responsibilities
-- **MARL Training**: PPO-based training with role-specific rewards and communication
-- **Visualization**: Real-time rendering of construction progress with Pygame
-- **Evaluation Tools**: Comprehensive analysis and visualization of training results
+- **Intelligent Cost Estimation**: Multi-agent negotiation produces consensus cost estimates
+- **Project Type Support**: Residential, Commercial, Transportation, Water Infrastructure  
+- **Market-Responsive Pricing**: Dynamic adjustment based on economic conditions
+- **Risk Assessment**: Comprehensive analysis and mitigation strategies
+- **User Customization**: Override default rates and project parameters
+- **Historical Learning**: Database storage and trend analysis for improved accuracy
 
 ## 🚀 Quick Start
 
@@ -20,141 +21,149 @@ git clone https://github.com/geotechnick/MARL-Construstion
 cd MARL-Construction
 ```
 
-2. **Run the installation script**:
+2. **Install dependencies**:
 ```bash
-python scripts/install.py
-```
-
-3. **Quick demo**:
-```bash
-python scripts/quick_start.py
-```
-
-### Manual Installation
-
-If the installation script doesn't work:
-
-```bash
-# Create virtual environment (recommended)
-python -m venv marl_env
-source marl_env/bin/activate  # On Windows: marl_env\Scripts\activate
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Install package in development mode
-pip install -e .
 ```
 
-## 🎮 Usage
+3. **Launch the system**:
+```bash
+# GUI Interface (Recommended)
+python main.py --gui
 
-### Basic Training
+# Command Line Demo
+python main.py --demo
+
+# System Tests
+python main.py --test
+```
+
+### Requirements
 
 ```bash
-python examples/basic_training.py
+python -m pip install -r requirements.txt
 ```
 
-This will:
-- Create a construction environment with 4 specialized agents
-- Train agents for 500 episodes using PPO
-- Save models and training plots
-- Evaluate final performance
+## 💻 Usage
 
-### Custom Site Builder
-
+### GUI Interface (Recommended)
 ```bash
-python examples/site_builder.py
+python main.py --gui
 ```
+Launch the complete graphical interface for project configuration, cost estimation, and results analysis.
 
-Interactive GUI for designing custom construction scenarios with drag-and-drop placement.
-
-### Train on Custom Sites
-
+### Command Line Estimation
 ```bash
-python examples/train_custom_site.py --site my_site.json --episodes 1000
+python main.py --estimate project_config.json --output results.json
 ```
+Estimate costs from a JSON configuration file and save results.
 
-### Evaluation
-
+### System Demonstration
 ```bash
-python examples/evaluate_agents.py
+python main.py --demo
 ```
+Run comprehensive demonstration showing all system capabilities.
 
-Evaluates trained models with detailed analysis and visualization.
-
-### Quick Start Options
-
+### Testing & Validation
 ```bash
-python scripts/quick_start.py --mode demo        # Environment demo only
-python scripts/quick_start.py --mode train       # Quick training only  
-python scripts/quick_start.py --mode interactive # Interactive demo only
-python scripts/quick_start.py --mode all         # All modes (default)
+python main.py --test
+```
+Execute the complete test suite and generate performance reports.
+
+## 🏛️ System Architecture
+
+### Multi-Agent Environment
+- PettingZoo-based negotiation environment
+- Market condition modeling and dynamics
+- Project-specific parameter spaces
+- Agent communication and coordination
+
+### Intelligent Agents
+- **Owner Agent**: Minimizes cost, risk, and duration while maximizing quality
+- **Contractor Agent**: Optimizes pricing strategies, resource allocation, and profit margins  
+- **Supplier Agent**: Sets material prices and manages availability based on market conditions
+- **Regulator Agent**: Enforces compliance requirements and assesses regulatory risks
+- **Estimator Agent**: Provides final consensus estimates using historical project data
+
+### Cost Estimation Engine
+- Multi-agent negotiation orchestration
+- Consensus building and convergence analysis
+- Risk assessment and adjustment
+- Historical learning and adaptation
+
+### Data Management
+- SQLite database for project storage
+- Regional cost databases with user overrides
+- Market trend tracking and analysis
+- Historical project similarity matching
+
+## 🏗️ Supported Project Types
+
+| Project Type | Examples | Key Parameters |
+|--------------|----------|----------------|
+| **Residential** | Homes, apartments, condos | Area, stories, foundation, finish level |
+| **Commercial** | Offices, retail, warehouses | Structural system, occupancy, MEP complexity |
+| **Transportation** | Roads, bridges, railways | Length, lanes, terrain, bridge count |
+| **Water Infrastructure** | Treatment plants, pipelines | Capacity, treatment level, pipe depth |
+
+## ⚙️ Configuration Examples
+
+### Project Configuration
+```json
+{
+  "project": {
+    "project_type": "residential",
+    "location": "midwest", 
+    "total_area": 2500,
+    "duration_months": 12,
+    "complexity_score": 0.6,
+    "risk_factors": {
+      "environmental_sensitivity": 0.3,
+      "geotechnical_risk": 0.2,
+      "weather_exposure": 0.4,
+      "regulatory_complexity": 0.25
+    },
+    "custom_parameters": {
+      "foundation_type": "basement",
+      "stories": 2,
+      "finish_level": "standard"
+    }
+  }
+}
 ```
 
-## 🏛️ Architecture
-
-### Environment (`ConstructionEnv`)
-- Grid-based construction site
-- Materials and construction tasks
-- Multi-agent coordination requirements
-- Role-specific action spaces
-
-### Custom Site Builder (`ConstructionSiteBuilder`)
-- **Interactive GUI** for designing construction scenarios
-- **Drag-and-drop** placement of materials, tasks, and spawn points
-- **Save/Load** custom sites for training
-- **Live testing** with MARL agents
-
-### Agents (`ConstructionAgent`)
-- **Builder**: Constructs structures from materials
-- **Transporter**: Moves materials around the site
-- **Crane Operator**: Handles heavy lifting and precise placement
-- **Supervisor**: Coordinates team activities
-
-### Training (`MARLTrainer`)
-- PPO with centralized training, decentralized execution
-- Role-specific reward functions
-- Communication learning between agents
-- Tensorboard logging and model checkpointing
-
-## 📊 Agent Roles
-
-| Role | Primary Actions | Reward Focus |
-|------|----------------|--------------|
-| **Builder** | Construct structures | Building completion, proximity to tasks |
-| **Transporter** | Carry materials | Material delivery, efficient routing |
-| **Crane Operator** | Heavy lifting | Precise placement, coordination |
-| **Supervisor** | Team coordination | Overall project efficiency |
-
-## 🔧 Configuration
-
-Key parameters in training:
-
+### Python API Usage
 ```python
-env = ConstructionEnv(
-    num_agents=4,           # Number of agents
-    site_width=20,          # Construction site width
-    site_height=20,         # Construction site height
-    max_timesteps=500,      # Episode length
-    render_mode="human"     # Visualization mode
+from marl_construction.estimation.cost_engine import CostEstimationEngine
+from marl_construction.agents.cost_estimation_agents import ProjectSpec, MarketConditions
+
+# Create estimation engine
+engine = CostEstimationEngine()
+
+# Define project
+project = ProjectSpec(
+    project_type="commercial",
+    location="west", 
+    total_area=50000,
+    duration_months=24,
+    complexity_score=0.7,
+    # ... additional parameters
 )
 
-trainer = MARLTrainer(
-    env=env,
-    agents=agents,
-    lr=3e-4,                # Learning rate
-    gamma=0.99,             # Discount factor
-    communication_enabled=True  # Agent communication
-)
+# Run estimation
+result = engine.estimate_project_cost(project, market_conditions)
+print(f"Estimated cost: ${result.total_cost:,.2f}")
 ```
 
-## 📈 Results
+## 📊 Industry Pain Points Addressed
 
-After training, you can expect:
-- Coordinated behavior between specialized agents
-- Efficient task completion strategies
-- Emergent communication patterns
-- Success rates of 70-90% on construction tasks
+| Pain Point | MARL Solution |
+|------------|---------------|
+| **Scope Creep** | Real-time change impact analysis with agent re-negotiation |
+| **Price Volatility** | Dynamic market condition modeling and adjustment |
+| **Communication Delays** | Transparent agent negotiations simulate real-world dynamics |
+| **Risk Underestimation** | Comprehensive risk assessment with uncertainty quantification |
+| **Change Order Processing** | Instant scope change impact analysis and re-estimation |
 
 ## 🛠️ Development
 
@@ -162,35 +171,40 @@ After training, you can expect:
 ```
 MARL-Construction/
 ├── marl_construction/          # Main package
-│   ├── envs/                  # Environment implementations
-│   ├── agents/                # Agent architectures
-│   └── training/              # Training algorithms
-├── examples/                  # Usage examples
-├── scripts/                   # Setup and utility scripts
-├── logs/                      # Training logs and models
+│   ├── agents/                # Agent implementations (Owner, Contractor, etc.)
+│   ├── envs/                  # Cost estimation environment
+│   ├── estimation/            # Core estimation engine
+│   ├── projects/              # Project type definitions
+│   ├── data/                  # Database and default rates
+│   ├── ui/                    # User interface components
+│   └── evaluation/            # Metrics and testing
+├── examples/                  # Usage examples and demos
+├── logs/                      # System logs and model checkpoints
 └── requirements.txt           # Dependencies
 ```
 
-### Adding New Agent Types
+### Adding New Project Types
 
-1. Extend `ConstructionAgent` with role-specific networks
-2. Update `RoleSpecificReward` for new reward functions
-3. Modify environment action/observation spaces if needed
+1. Create project type class in `marl_construction/projects/project_types.py`
+2. Define work breakdown structure and cost drivers
+3. Implement complexity multipliers and quantity estimation
+4. Update UI forms and agent logic as needed
 
-### Custom Environments
+### Customizing Agents
 
-Inherit from `ConstructionEnv` and override:
-- `_generate_construction_scenario()` for custom tasks
-- `_get_observation()` for different state representations
-- `_process_agent_action()` for new action types
+1. Extend base agent classes in `marl_construction/agents/cost_estimation_agents.py`
+2. Modify reward functions and negotiation strategies
+3. Update observation and action spaces in environment
+4. Retrain or fine-tune agent models
 
 ## 📝 Requirements
 
 - Python 3.8+
 - PyTorch 2.0+
 - PettingZoo 1.24+
-- Pygame 2.1+
-- NumPy, Matplotlib, TensorBoard
+- NumPy, Pandas, Matplotlib
+- tkinter, Seaborn (for GUI)
+- SQLite3 (included with Python)
 
 ## 🤝 Contributing
 
